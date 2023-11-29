@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container" >
+    <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
+        <div class="col-6">
+            <div style="display: flex; flex-direction: column;align-items: stretch; justify-content: space-around;">
+                <div class="sensor-data ">
+                    <h2>Yakınlık Sensörü</h2>
+                    <div class="sensor-box" id="proximity-box">
+                        <p id="proximity-sensor">Yakınlık Sensörü: </p>
+                        <div id="proximity-controls">
+                            <input type="radio" id="slow" name="speed" value="1">
+                            <label for="slow">Yavaş</label>
+                            <input type="radio" id="medium" name="speed" value="2">
+                            <label for="medium">Orta</label>
+                            <input type="radio" id="fast" name="speed" value="3">
+                            <label for="fast">Hızlı</label>
+                            <button id="send-proximity">Gönder</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sensor-data">
+                    <h2>Gaz Sensörü</h2>
+                    <div class="sensor-box" id="gas-box">
+                        <p id="gas-sensor">Gaz Sensörü: </p>
+                        <div id="gas-controls">
+                            <input type="radio" id="gas-slow" name="gasSpeed" value="1">
+                            <label for="gas-slow">Yavaş</label>
+                            <input type="radio" id="gas-medium" name="gasSpeed" value="2">
+                            <label for="gas-medium">Orta</label>
+                            <input type="radio" id="gas-fast" name="gasSpeed" value="3">
+                            <label for="gas-fast">Hızlı</label>
+                            <button id="send-gas">Gönder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6" style="background-color: rgba(0, 0, 0, 0.2);align-items: stretch;">
+            Camera
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#send-proximity').click(function () {
+            var selectedSpeed = $('input[name="speed"]:checked').val();
+
+            $.post('/Home/SendProximity', { speed: selectedSpeed })
+                .done(function (response) {
+                    if (response === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Done!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                })
+                .fail(function (response) {
+
+                    if (response === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
+                    }
+                });
+        });
+
+        // Gaz sensörü verilerini gönderme
+        $('#send-gas').click(function () {
+            var selectedGasSpeed = $('input[name="gasSpeed"]:checked').val();
+
+            $.post('/Home/SendGas', { gasSpeed: selectedGasSpeed })
+                .done(function (response) {
+                    if (response === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Done!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                })
+                .fail(function (response) {
+
+                    if (response === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
+                    }
+                });
+        });
+
+        function getProximitySensorData() {
+            $.getJSON('http://127.0.0.1:5000/flask/sensor/hcsr04')
+                .done(function (data) {
+                    console.log(data);
+                    $('#proximity-sensor').text('Yakınlık Sensörü: ' + data);
+                    if (data >= 20) {
+                        $('#proximity-box').addClass('highlight');
+                    } else {
+                        $('#proximity-box').removeClass('highlight');
+                    }
+                })
+                .fail(function () {
+                    console.error('Yakınlık sensörü verileri alınamadı.');
+                });
+        }
+
+        function getGasSensorData() {
+            $.getJSON('http://127.0.0.1:5000/flask/sensor/gas')
+                .done(function (data) {
+                    console.log(data);
+                    $('#gas-sensor').text('Gaz Sensörü: ' + data);
+                    if (data > 75) {
+                        $('#gas-box').addClass('highlight');
+                    } else {
+                        $('#gas-box').removeClass('highlight');
+                    }
+                })
+                .fail(function () {
+                    console.error('Gaz sensörü verileri alınamadı.');
+                });
+        }
+
+        setInterval(function () {
+            getProximitySensorData();
+            getGasSensorData();
+        }, 3000);
+
+    });
+
+</script>
+
+<style>
+    .highlight {
+        background-color: yellow;
+        color: black;
+    }
+</style>
