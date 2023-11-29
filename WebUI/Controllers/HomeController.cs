@@ -51,6 +51,7 @@ public class HomeController : Controller
         }
         catch (Exception ex)
         {
+            return Json(false);
         }
 
         return View();
@@ -78,6 +79,7 @@ public class HomeController : Controller
         }
         catch (Exception ex)
         {
+            return Json(false);
         }
 
         return View();
