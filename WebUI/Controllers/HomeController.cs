@@ -15,7 +15,7 @@ public class HomeController : Controller
     {
         _logger = logger;
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("http://127.0.0.1:5000/flask/");
+        _httpClient.BaseAddress = new Uri("http://10.42.0.41:5000/flask/");
     }
 
     public IActionResult Index()
@@ -40,7 +40,14 @@ public class HomeController : Controller
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return Json(true);
+                if (responseContent == "1")
+                {
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
             }
         }
         catch (Exception ex)
@@ -61,8 +68,18 @@ public class HomeController : Controller
 
             if (response.IsSuccessStatusCode)
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return Json(true);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    if (responseContent == "1")
+                    {
+                        return Json(true);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
             }
         }
         catch (Exception ex)

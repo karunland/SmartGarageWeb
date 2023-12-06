@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Smart Garage";
 }
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -9,19 +9,31 @@
     <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
         <div class="col-6">
             <div style="display: flex; flex-direction: column;align-items: stretch; justify-content: space-around;">
-                <div class="sensor-data ">
+                <div class="sensor-data mb-5">
                     <h2>Yakınlık Sensörü</h2>
                     <div class="sensor-box" id="proximity-box">
                         <p id="proximity-sensor">Yakınlık Sensörü: </p>
-                        <div id="proximity-controls">
-                            <input type="radio" id="slow" name="speed" value="9">
-                            <label for="slow">Yavaş</label>
-                            <input type="radio" id="medium" name="speed" value="15">
-                            <label for="medium">Orta</label>
-                            <input type="radio" id="fast" name="speed" value="30">
-                            <label for="fast">Hızlı</label>
-                            <button id="send-proximity">Gönder</button>
+                        <p>Kapıyı Aç </p>
+
+                        <div class="form-check" id="proximity-controls">
+                            <input class="form-check-input" type="radio" name="speed" id="slow" value="9" checked>
+                            <label class="form-check-label" for="slow">
+                                Yavaş
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
+                            <label class="form-check-label" for="medium">
+                                Orta
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
+                            <label class="form-check-label" for="fast">
+                                Hızlı
+                            </label>
                         </div>
+                        <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
                     </div>
                 </div>
 
@@ -29,15 +41,26 @@
                     <h2>Gaz Sensörü</h2>
                     <div class="sensor-box" id="gas-box">
                         <p id="gas-sensor">Gaz Sensörü: </p>
-                        <div id="gas-controls">
-                            <input type="radio" id="gas-slow" name="gasSpeed" value="1">
-                            <label for="gas-slow">Yavaş</label>
-                            <input type="radio" id="gas-medium" name="gasSpeed" value="2">
-                            <label for="gas-medium">Orta</label>
-                            <input type="radio" id="gas-fast" name="gasSpeed" value="3">
-                            <label for="gas-fast">Hızlı</label>
-                            <button id="send-gas">Gönder</button>
+                        <p>Fanı Ayarla</p>
+                        <div class="form-check" id="gas-controls">
+                            <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="1" checked>
+                            <label class="form-check-label" for="slow">
+                                Yavaş
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="2">
+                            <label class="form-check-label" for="medium">
+                                Orta
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="3">
+                            <label class="form-check-label" for="fast">
+                                Hızlı
+                            </label>
                         </div>
+                        <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
                     </div>
                 </div>
             </div>
@@ -76,7 +99,7 @@
                             icon: "success",
                             title: "Done!",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2000
                         });
                     } else {
                         console.log('İşlem tamamlanamadı.');
@@ -85,21 +108,20 @@
                             icon: "error",
                             title: "Error!",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2000
                         });
                     }
                 })
                 .fail(function (response) {
-
-                    if (response === true) {
-                        console.log('İşlem başarıyla tamamlandı.');
-                    } else {
-                        console.log('İşlem tamamlanamadı.');
-                    }
+                    Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            showConfirmButton: false,
+                            timer: 2000
+                    });
                 });
         });
 
-        // Gaz sensörü verilerini gönderme
         $('#send-gas').click(function () {
             var selectedGasSpeed = $('input[name="gasSpeed"]:checked').val();
 
@@ -111,7 +133,7 @@
                             icon: "success",
                             title: "Done!",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2000
                         });
                     } else {
                         console.log('İşlem tamamlanamadı.');
@@ -119,22 +141,22 @@
                             icon: "error",
                             title: "Error!",
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 2000
                         });
                     }
                 })
                 .fail(function (response) {
-
-                    if (response === true) {
-                        console.log('İşlem başarıyla tamamlandı.');
-                    } else {
-                        console.log('İşlem tamamlanamadı.');
-                    }
+                    Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            showConfirmButton: false,
+                            timer: 2000
+                    });
                 });
         });
 
         function getProximitySensorData() {
-            $.getJSON('http://127.0.0.1:5000/flask/sensor/hcsr04')
+            $.getJSON('http://10.42.0.41:5000/flask/sensor/hcsr04')
                 .done(function (data) {
                     console.log(data);
                     $('#proximity-sensor').text('Yakınlık Sensörü: ' + data);
@@ -150,7 +172,7 @@
         }
 
         function getGasSensorData() {
-            $.getJSON('http://127.0.0.1:5000/flask/sensor/gas')
+            $.getJSON('http://10.42.0.41:5000/flask/sensor/gas')
                 .done(function (data) {
                     console.log(data);
                     $('#gas-sensor').text('Gaz Sensörü: ' + data);
@@ -168,7 +190,7 @@
         setInterval(function () {
             getProximitySensorData();
             getGasSensorData();
-        }, 500);
+        }, 3500);
     });
 
 </script>
