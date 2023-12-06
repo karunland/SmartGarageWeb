@@ -32,39 +32,31 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<ActionResult> SendProximity(string speed)
     {
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StringContent(speed), "speed");
         try
         {
-            var formData = new MultipartFormDataContent();
-            formData.Add(new StringContent(speed), "speed");
-
             var response = await _httpClient.PostAsync("set/servo", formData);
-
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return Json(true);
             }
-            else
-            {
-                return Json(false);
-            }
         }
         catch (Exception ex)
         {
-            return Json(false);
+            Console.WriteLine(ex.Message);
         }
-
-        return View();
+        return Json(false);
     }
 
     [HttpPost]
     public async Task<ActionResult> SendGas(string gasSpeed)
     {
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StringContent(gasSpeed), "speed");
         try
         {
-            var formData = new MultipartFormDataContent();
-            formData.Add(new StringContent(gasSpeed), "speed");
-
             var response = await _httpClient.PostAsync("set/servo", formData);
 
             if (response.IsSuccessStatusCode)
@@ -72,16 +64,11 @@ public class HomeController : Controller
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return Json(true);
             }
-            else
-            {
-                return Json(false);
-            }
         }
         catch (Exception ex)
         {
-            return Json(false);
+            Console.WriteLine(ex.Message);
         }
-
-        return View();
+        return Json(false);
     }
 }

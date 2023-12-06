@@ -14,11 +14,11 @@
                     <div class="sensor-box" id="proximity-box">
                         <p id="proximity-sensor">Yakınlık Sensörü: </p>
                         <div id="proximity-controls">
-                            <input type="radio" id="slow" name="speed" value="1">
+                            <input type="radio" id="slow" name="speed" value="9">
                             <label for="slow">Yavaş</label>
-                            <input type="radio" id="medium" name="speed" value="2">
+                            <input type="radio" id="medium" name="speed" value="15">
                             <label for="medium">Orta</label>
-                            <input type="radio" id="fast" name="speed" value="3">
+                            <input type="radio" id="fast" name="speed" value="30">
                             <label for="fast">Hızlı</label>
                             <button id="send-proximity">Gönder</button>
                         </div>
@@ -45,7 +45,17 @@
         </div>
 
         <div class="col-6" style="background-color: rgba(0, 0, 0, 0.2);align-items: stretch;">
-            Camera
+            <img id="streamImg" src="" width="640" height="480">
+        </div>
+
+        <script>
+            const imgElement = document.getElementById('streamImg');
+
+            function updateStream() {
+                imgElement.src = 'http://10.42.0.41:8000/stream.mjpg';
+            }
+            updateStream();
+        </script>
         </div>
     </div>
 
@@ -128,7 +138,7 @@
                 .done(function (data) {
                     console.log(data);
                     $('#proximity-sensor').text('Yakınlık Sensörü: ' + data);
-                    if (data >= 20) {
+                    if (data <= 5) {
                         $('#proximity-box').addClass('highlight');
                     } else {
                         $('#proximity-box').removeClass('highlight');
@@ -144,7 +154,7 @@
                 .done(function (data) {
                     console.log(data);
                     $('#gas-sensor').text('Gaz Sensörü: ' + data);
-                    if (data > 75) {
+                    if (data >= 1) {
                         $('#gas-box').addClass('highlight');
                     } else {
                         $('#gas-box').removeClass('highlight');
@@ -158,15 +168,14 @@
         setInterval(function () {
             getProximitySensorData();
             getGasSensorData();
-        }, 3000);
-
+        }, 500);
     });
 
 </script>
 
 <style>
     .highlight {
-        background-color: yellow;
+        background-color: red;
         color: black;
     }
 </style>
