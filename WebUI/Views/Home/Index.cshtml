@@ -7,12 +7,12 @@
 
 <div class="container" >
     <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
-        <div class="col-6">
+        <div class="col-md-6 mx-5">
             <div style="display: flex; flex-direction: column;align-items: stretch; justify-content: space-around;">
                 <div class="sensor-data mb-5">
                     <h2>Yakınlık Sensörü</h2>
-                    <div class="sensor-box" id="proximity-box">
-                        <p id="proximity-sensor">Yakınlık Sensörü: </p>
+                    <div class="box sensor-box" id="proximity-box">
+                        <p id="proximity-sensor">Sensör Değeri: </p>
                         <p>Kapıyı Aç </p>
 
                         <div class="form-check" id="proximity-controls">
@@ -39,8 +39,8 @@
 
                 <div class="sensor-data">
                     <h2>Gaz Sensörü</h2>
-                    <div class="sensor-box" id="gas-box">
-                        <p id="gas-sensor">Gaz Sensörü: </p>
+                    <div class="box sensor-box" id="gas-box">
+                        <p id="gas-sensor">Sensör  Değeri: </p>
                         <p>Fanı Ayarla</p>
                         <div class="form-check" id="gas-controls">
                             <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="1" checked>
@@ -67,7 +67,7 @@
 
         </div>
 
-        <div class="col-6" style="background-color: rgba(0, 0, 0, 0.2);align-items: stretch;">
+        <div class="col-md-6 col-6 mx-5" style="background-color: rgba(0, 0, 0, 0.2);align-items: stretch;">
             <img id="streamImg" src="" width="640" height="480">
         </div>
 
@@ -200,4 +200,16 @@
         background-color: red;
         color: black;
     }
+
+    .box {
+        box-shadow: .1rem .1rem .2rem #80D4FF;
+        border-radius: .4rem;
+        border-width: .01rem;
+        border-style: solid;
+        margin-left: .4rem;
+        padding: .2rem .7rem .3rem .7rem;
+        margin-bottom: .5rem;
+        margin-top: .3rem;
+    }
+
 </style>
