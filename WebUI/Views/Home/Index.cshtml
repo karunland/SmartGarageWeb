@@ -67,17 +67,79 @@
 
         </div>
 
-        <div class="col-md-6 col-6 mx-5" style="background-color: rgba(0, 0, 0, 0.2);align-items: stretch;">
-            <img id="streamImg" src="" width="640" height="480">
+        <div class="col-md-6 col-6 mx-5" style="align-items: stretch;">
+            <img id="streamImg" width="640" height="480">
+            <div id="recordingIndicator">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                <path d="M14.5 3a.5.5 0 0 1 .5.5V13a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 13V3.5A.5.5 0 0 1 2 3v-.5A2.5 2.5 0 0 1 4.5 0h1A2.5 2.5 0 0 1 8 2.5v1A2.5 2.5 0 0 1 5.5 6h-1A2.5 2.5 0 0 1 2 3.5V3a.5.5 0 0 1 .5-.5h11zM11 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg>
+            </div>
+            <div>
+                <button class="btn btn-danger" id="startRecordingBtn">Kaydı Başlat</button>
+                <button class="btn btn-warning" id="stopRecordingBtn">Kaydı Durdur</button>
+            </div>
         </div>
+ <script>
+        $(document).ready(function () {
+            checkRecordingStatus();
+            setInterval(checkRecordingStatus, 500);
 
+            function checkRecordingStatus() {
+                $.ajax({
+                    url: '/home/checkRecordingStatus',
+                    type: 'GET',
+                    success: function (response) {
+                        if (response === "True") {
+                            $('#recordingIndicator').show();
+                        } else {
+                            $('#recordingIndicator').hide();
+                        }
+                    },
+                    error: function () {
+                        console.error('Durum alınamadı');
+                    }
+                });
+            }
+
+
+            $("#startRecordingBtn").click(function () {
+                $.ajax({
+                    url: '/home/startRecording',
+                    type: 'POST',
+                    success: function (response) {
+                        if (response === "True") {
+                            Swal.fire('Başarılı', 'Kayıt başlatıldı!', 'success');
+                        } else {
+                            Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                    }
+                });
+            });
+
+            $("#stopRecordingBtn").click(function () {
+                $.ajax({
+                    url: '/home/stopRecording',
+                    type: 'POST',
+                    success: function (response) {
+                        if (response === "True") {
+                            Swal.fire('Başarılı', 'Kayıt durduruldu!', 'success');
+                        } else {
+                            Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                    }
+                });
+            });
+        });
+    </script>
         <script>
             const imgElement = document.getElementById('streamImg');
-
-            function updateStream() {
                 imgElement.src = 'http://10.42.0.41:8000/stream.mjpg';
-            }
-            updateStream();
         </script>
         </div>
     </div>

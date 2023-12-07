@@ -1,16 +1,16 @@
 using System.Diagnostics;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models;
 
 namespace WebUI.Controllers;
 
+// [Route("[controller]/[action]")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClient _httpClient;
-
-
+    private static Process? videoProcess;
+    private int requestCount = 0;
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
@@ -87,5 +87,60 @@ public class HomeController : Controller
             Console.WriteLine(ex.Message);
         }
         return Json(false);
+    }
+
+    [HttpPost]
+    public IActionResult StartRecording()
+    {
+        if (videoProcess == null)
+        {
+            string command = "ffmpeg";
+            string arguments = "-f mjpeg -r 24 -i \"http://10.42.0.41:8000/stream.mjpg\" -r 24 ./video.avi";
+
+            // Yeni bir subprocess oluştur
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = command,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+
+            videoProcess = Process.Start(startInfo);
+            return Json("True");
+        }
+        else
+        {
+            return Json("False");
+        }
+    }
+
+    [HttpPost]
+    public IActionResult StopRecording()
+    {
+        if (videoProcess != null && !videoProcess.HasExited)
+        {
+            videoProcess.Kill();
+            videoProcess = null;
+            return Json("True");
+        }
+        else
+        {
+            return Json("False");
+        }
+    }
+
+    [HttpGet]
+    public IActionResult CheckRecordingStatus()
+    {
+        if (videoProcess != null && !videoProcess.HasExited)
+        {
+            return Json("True");
+        }
+        else
+        {
+            return Json("False");
+        }
     }
 }
