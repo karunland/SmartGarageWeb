@@ -5,144 +5,186 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="container" >
+<div class="container">
     <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
-        <div class="col-md-6 mx-5">
-            <div style="display: flex; flex-direction: column;align-items: stretch; justify-content: space-around;">
-                <div class="sensor-data mb-5">
-                    <h2>Yakınlık Sensörü</h2>
-                    <div class="box sensor-box" id="proximity-box">
-                        <p id="proximity-sensor">Sensör Değeri: </p>
-                        <p>Kapıyı Aç </p>
+        <div class="col-md-6 col-sm-12 mx-5">
+            <div>
+                <div style="display: flex; flex-direction: row;align-items: stretch; justify-content: space-around;">
+                    <div class="col-md-6 sensor-data mb-5">
+                        <h2>Yakınlık Sensörü</h2>
+                        <div class="box sensor-box" id="proximity-box">
+                            <p id="proximity-sensor">Sensör Değeri: </p>
+                            <p>Kapıyı Aç </p>
 
-                        <div class="form-check" id="proximity-controls">
-                            <input class="form-check-input" type="radio" name="speed" id="slow" value="9" checked>
-                            <label class="form-check-label" for="slow">
-                                Yavaş
-                            </label>
+                            <div class="form-check" id="proximity-controls">
+                                <input class="form-check-input" type="radio" name="speed" id="slow" value="9" checked>
+                                <label class="form-check-label" for="slow">
+                                    Yavaş
+                                </label>
                             </div>
                             <div class="form-check">
-                            <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
-                            <label class="form-check-label" for="medium">
-                                Orta
-                            </label>
+                                <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
+                                <label class="form-check-label" for="medium">
+                                    Orta
+                                </label>
                             </div>
                             <div class="form-check">
-                            <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
-                            <label class="form-check-label" for="fast">
-                                Hızlı
-                            </label>
+                                <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
+                                <label class="form-check-label" for="fast">
+                                    Hızlı
+                                </label>
+                            </div>
+                            <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
                         </div>
-                        <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
+                    </div>
+
+                    <div class="col-md-6 sensor-data">
+                        <h2>Gaz Sensörü</h2>
+                        <div class="box sensor-box" id="gas-box">
+                            <p id="gas-sensor">Sensör Değeri: </p>
+                            <p>Fanı Ayarla</p>
+                            <div class="form-check" id="gas-controls">
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="1"
+                                    checked>
+                                <label class="form-check-label" for="slow">
+                                    Yavaş
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="2">
+                                <label class="form-check-label" for="medium">
+                                    Orta
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="3">
+                                <label class="form-check-label" for="fast">
+                                    Hızlı
+                                </label>
+                            </div>
+                            <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="sensor-data">
-                    <h2>Gaz Sensörü</h2>
-                    <div class="box sensor-box" id="gas-box">
-                        <p id="gas-sensor">Sensör  Değeri: </p>
-                        <p>Fanı Ayarla</p>
-                        <div class="form-check" id="gas-controls">
-                            <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="1" checked>
-                            <label class="form-check-label" for="slow">
-                                Yavaş
-                            </label>
-                            </div>
-                            <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="2">
-                            <label class="form-check-label" for="medium">
-                                Orta
-                            </label>
-                            </div>
-                            <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="3">
-                            <label class="form-check-label" for="fast">
-                                Hızlı
-                            </label>
-                        </div>
-                        <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
-                    </div>
+                <div class="col-12">
+                    @await Component.InvokeAsync("Files")
                 </div>
             </div>
-
         </div>
 
-        <div class="col-md-6 col-6 mx-5" style="align-items: stretch;">
-            <img id="streamImg" width="640" height="480">
-            <div id="recordingIndicator">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
-                <path d="M14.5 3a.5.5 0 0 1 .5.5V13a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 13V3.5A.5.5 0 0 1 2 3v-.5A2.5 2.5 0 0 1 4.5 0h1A2.5 2.5 0 0 1 8 2.5v1A2.5 2.5 0 0 1 5.5 6h-1A2.5 2.5 0 0 1 2 3.5V3a.5.5 0 0 1 .5-.5h11zM11 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg>
+        <div class="col-md-6 col-sm-12 mx-5" style="align-items: stretch;">
+            <div class="stream-container position-relative">
+                <img id="streamImg" class="img-fluid">
+                <div id="recordingIndicator"
+                    style="position: absolute;top: 0;right: 0;margin:15px;background: red;padding: 10px;border-radius: 50%;">
+                </div>
             </div>
-            <div>
+
+            <div class="mt-1">
                 <button class="btn btn-danger" id="startRecordingBtn">Kaydı Başlat</button>
                 <button class="btn btn-warning" id="stopRecordingBtn">Kaydı Durdur</button>
+                <button class="btn btn-primary" id="photo">Foto</button>
             </div>
         </div>
- <script>
-        $(document).ready(function () {
-            checkRecordingStatus();
-            setInterval(checkRecordingStatus, 500);
 
-            function checkRecordingStatus() {
-                $.ajax({
-                    url: '/home/checkRecordingStatus',
-                    type: 'GET',
-                    success: function (response) {
-                        if (response === "True") {
-                            $('#recordingIndicator').show();
-                        } else {
-                            $('#recordingIndicator').hide();
+        <script>
+            $(document).ready(function () {
+                checkRecordingStatus();
+                $("#stopRecordingBtn").prop("disabled", true);
+
+                setInterval(checkRecordingStatus, 500);
+
+                function checkRecordingStatus() {
+                    $.ajax({
+                        url: '/stream/checkRecordingStatus',
+                        type: 'GET',
+                        success: function (response) {
+                            if (response === "True") {
+                                $('#recordingIndicator').show();
+                            } else {
+                                $('#recordingIndicator').hide();
+                            }
+                        },
+                        error: function () {
+                            console.error('Durum alınamadı');
                         }
-                    },
-                    error: function () {
-                        console.error('Durum alınamadı');
-                    }
+                    });
+                }
+
+                $("#startRecordingBtn").click(function () {
+                    $.ajax({
+                        url: '/stream/startRecording',
+                        type: 'POST',
+                        success: function (response) {
+                            if (response === "True") {
+                                Swal.fire('Başarılı', 'Kayıt başlatıldı!', 'success');
+                                $("#startRecordingBtn").prop("disabled", true);
+                                $("#stopRecordingBtn").prop("disabled", false);
+                            } else {
+                                Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                        }
+                    });
                 });
-            }
 
-
-            $("#startRecordingBtn").click(function () {
-                $.ajax({
-                    url: '/home/startRecording',
-                    type: 'POST',
-                    success: function (response) {
-                        if (response === "True") {
-                            Swal.fire('Başarılı', 'Kayıt başlatıldı!', 'success');
-                        } else {
-                            Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
+                $("#stopRecordingBtn").click(function () {
+                    $.ajax({
+                        url: '/stream/stopRecording',
+                        type: 'POST',
+                        success: function (response) {
+                            if (response === "True") {
+                                Swal.fire('Başarılı', 'Kayıt durduruldu!', 'success');
+                                $("#startRecordingBtn").prop("disabled", false);
+                                $("#stopRecordingBtn").prop("disabled", true);
+                            } else {
+                                Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
                         }
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                    }
+                    });
+                });
+
+                $("#photo").click(function () {
+                    $.ajax({
+                        url: '/stream/CapturePhoto',
+                        type: 'POST',
+                        success: function (response) {
+                            if (response === "True") {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Done!",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error!",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                        }
+                    });
                 });
             });
-
-            $("#stopRecordingBtn").click(function () {
-                $.ajax({
-                    url: '/home/stopRecording',
-                    type: 'POST',
-                    success: function (response) {
-                        if (response === "True") {
-                            Swal.fire('Başarılı', 'Kayıt durduruldu!', 'success');
-                        } else {
-                            Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                    }
-                });
-            });
-        });
-    </script>
+        </script>
         <script>
             const imgElement = document.getElementById('streamImg');
-                imgElement.src = 'http://10.42.0.41:8000/stream.mjpg';
+            imgElement.src = 'http://10.42.0.41:8000/stream.mjpg';
         </script>
-        </div>
     </div>
+
+
+</div>
 
 </div>
 
@@ -176,10 +218,10 @@
                 })
                 .fail(function (response) {
                     Swal.fire({
-                            icon: "error",
-                            title: "Error!",
-                            showConfirmButton: false,
-                            timer: 2000
+                        icon: "error",
+                        title: "Error!",
+                        showConfirmButton: false,
+                        timer: 2000
                     });
                 });
         });
@@ -209,10 +251,10 @@
                 })
                 .fail(function (response) {
                     Swal.fire({
-                            icon: "error",
-                            title: "Error!",
-                            showConfirmButton: false,
-                            timer: 2000
+                        icon: "error",
+                        title: "Error!",
+                        showConfirmButton: false,
+                        timer: 2000
                     });
                 });
         });
@@ -221,7 +263,7 @@
             $.getJSON('http://10.42.0.41:5000/flask/sensor/hcsr04')
                 .done(function (data) {
                     console.log(data);
-                    $('#proximity-sensor').text('Yakınlık Sensörü: ' + data);
+                    $('#proximity-sensor').text('Yakınlık Sensörü: ' + data + "cm");
                     if (data <= 5) {
                         $('#proximity-box').addClass('highlight');
                     } else {
@@ -237,7 +279,6 @@
             $.getJSON('http://10.42.0.41:5000/flask/sensor/gas')
                 .done(function (data) {
                     console.log(data);
-                    $('#gas-sensor').text('Gaz Sensörü: ' + data);
                     if (data >= 1) {
                         $('#gas-box').addClass('highlight');
                     } else {
@@ -246,6 +287,17 @@
                 })
                 .fail(function () {
                     console.error('Gaz sensörü verileri alınamadı.');
+                });
+        }
+
+        function getGasSensorData() {
+            $.getJSON('http://10.42.0.41:5000/flask/sensor/gas/0')
+                .done(function (data) {
+                    console.log(data);
+                    $('#gas-sensor').text('Gaz Sensörü: ' + data.sensor_value);
+                })
+                .fail(function () {
+                    console.error('Gaz sensörü I2C verileri alınamadı.');
                 });
         }
 
@@ -273,5 +325,4 @@
         margin-bottom: .5rem;
         margin-top: .3rem;
     }
-
 </style>
