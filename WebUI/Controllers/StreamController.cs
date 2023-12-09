@@ -23,7 +23,7 @@ public class StreamController : Controller
         {
             string command = "ffmpeg";
             var fileName = _fileService.GetNewVideoFileName();
-            string arguments = $"-f mjpeg -r 24 -i \"http://10.42.0.41:8000/stream.mjpg\" -r 24 ./videos/{fileName}";
+            string arguments = $"-f mjpeg -r 24 -i \"http://10.42.0.41:8000/stream.mjpg\" -r 24 ./Media/{fileName}";
 
             // Yeni bir subprocess oluştur
             var startInfo = new ProcessStartInfo
@@ -81,8 +81,8 @@ public class StreamController : Controller
             {
                 photoProcess.Kill();
             }
-
-            string ffmpegArgs = "-i  \"http://10.42.0.41:8000/stream.mjpg\"  -vframes 1 -f image2 photo.png";
+            var fileName = _fileService.GetNewPhotoFileName();
+            string ffmpegArgs = $"-i  \"http://10.42.0.41:8000/stream.mjpg\"  -vframes 1 -f image2 ./Media/{fileName}";
 
             ProcessStartInfo startInfo = new()
             {

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Smart Garage";
+    ViewData["Title"] = "Home";
 }
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -44,20 +44,20 @@
                             <p id="gas-sensor">Sensör Değeri: </p>
                             <p>Fanı Ayarla</p>
                             <div class="form-check" id="gas-controls">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="1"
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="5"
                                     checked>
                                 <label class="form-check-label" for="slow">
                                     Yavaş
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="2">
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="50">
                                 <label class="form-check-label" for="medium">
                                     Orta
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="3">
+                                <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="100">
                                 <label class="form-check-label" for="fast">
                                     Hızlı
                                 </label>
@@ -263,7 +263,7 @@
             $.getJSON('http://10.42.0.41:5000/flask/sensor/hcsr04')
                 .done(function (data) {
                     console.log(data);
-                    $('#proximity-sensor').text('Yakınlık Sensörü: ' + data + "cm");
+                    $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
                     if (data <= 5) {
                         $('#proximity-box').addClass('highlight');
                     } else {
@@ -294,7 +294,7 @@
             $.getJSON('http://10.42.0.41:5000/flask/sensor/gas/0')
                 .done(function (data) {
                     console.log(data);
-                    $('#gas-sensor').text('Gaz Sensörü: ' + data.sensor_value);
+                    $('#gas-sensor').text('Sensör Değeri: ' + data.sensor_value);
                 })
                 .fail(function () {
                     console.error('Gaz sensörü I2C verileri alınamadı.');
