@@ -12,8 +12,10 @@ public class HomeController : Controller
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("http://10.42.0.41:5000/flask/");
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("http://10.42.0.41:5000/flask/")
+        };
     }
 
     public IActionResult Index()

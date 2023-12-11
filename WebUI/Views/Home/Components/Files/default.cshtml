@@ -2,7 +2,7 @@
 
 @model IEnumerable<FileModel>
 <div class="table-wrapper">
-    <table class="table table-striped">
+    <table class="table table-striped table-sm">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">Dosya Türü</th>
@@ -11,19 +11,6 @@
             </tr>
         </thead>
         <tbody>
-
-            <tr>
-                <td>Extension</td>
-                <td>Name</td>
-                <td>
-                
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                                data-whatever="">
-                            Mait At
-                        </button>
-                    
-                </td>
-            </tr>
             @foreach (var item in Model)
             {
                 <tr>
@@ -32,8 +19,7 @@
                     <td>
                         @if (item.Extension == ".png")
                         {
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                                data-whatever="">Mait At </button>
+                            <a class="btn btn-primary" onclick='myFunction("@item.Name.ToString()")'>Mail</a>
                         }
                     </td>
                 </tr>
@@ -42,35 +28,51 @@
     </table>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form href="/file/sendMail">
+            <form asp-action="SendMail" asp-controller="File" method="POST"
+                data-ajax="true"
+                data-ajax-success="OnAjaxSuccess"
+                data-ajax-failure="OnAjaxError">
+                
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <h5 class="modal-title" id="mailModalLabel">Yeni Mail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label for="MailAddress" class="col-form-label">Alıcı:</label>
+                        <input type="text" class="form-control" id="MailAddress" name="MailAddress" value="test@gmail.com">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea class="form-control" id="message-text"></textarea>
+                        <label for="message-text" class="col-form-label">Dosya:</label>
+                        <input type="text" class="form-control" readonly id="FileName" val="" name="FileName">
+                    </div>
+                    <div class="form-group">
+                        <img id="imgInput" class="img-fluid" src="" alt="Resim" />
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function myFunction(val) {
+        debugger;
+        $("#imgInput").attr("src", "/File/GetFile?filePath=" + val + ".png");
+        $("#FileName").val(val);
+        $("#mailModal").modal("show");
+    }
+</script>
 
 <style>
     .table-wrapper {
