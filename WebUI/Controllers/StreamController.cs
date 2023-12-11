@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Xml.Schema;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models;
 using WebUI.Services;
@@ -75,6 +76,15 @@ public class StreamController : Controller
     [HttpPost]
     public IActionResult CapturePhoto()
     {
+        var a = _fileService.GetLatestPhoto();
+        var s = new CapturePhotoResponse
+        {
+            Success = true,
+            FileName = a
+        };
+        
+        return Ok(s);
+
         try
         {
             if (photoProcess != null && !photoProcess.HasExited)
@@ -107,5 +117,11 @@ public class StreamController : Controller
         {
             return Json("False");
         }
+    }
+
+    public class CapturePhotoResponse
+    {
+        public bool Success { get; set; }
+        public string FileName { get; set; }
     }
 }

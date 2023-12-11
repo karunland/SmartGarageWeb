@@ -1,4 +1,5 @@
 
+using System.Text.RegularExpressions;
 using WebUI.Models;
 
 namespace WebUI.Services;
@@ -68,7 +69,7 @@ public class FileService
         return newFileName;
     }
 
-      public string GetNewPhotoFileName()
+    public string GetNewPhotoFileName()
     {
         string folderPath = "Media";
         string[] files = Directory.GetFiles(folderPath, "*.png");
@@ -97,5 +98,35 @@ public class FileService
         string newFileName = $"photo{maxNumber + 1}.png";
 
         return newFileName;
+    }
+
+
+    public string GetLatestPhoto()
+    {
+        string folderPath = "Media";
+        string[] files = Directory.GetFiles(folderPath, "*.png");
+
+        if (files.Length == 0)
+        {
+            return "photo0.png";
+        }
+
+        int maxNumber = 0;
+
+        foreach (string file in files)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(file);
+            string numberString = new string(fileName.Where(char.IsDigit).ToArray());
+
+            if (int.TryParse(numberString, out int number))
+            {
+                if (number > maxNumber)
+                {
+                    maxNumber = number;
+                }
+            }
+        }
+
+        return $"photo{maxNumber}";
     }
 }

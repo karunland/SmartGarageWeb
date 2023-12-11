@@ -2,67 +2,69 @@
     ViewData["Title"] = "Home";
 }
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container">
     <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
         <div class="col-md-6 col-sm-12 mx-5">
             <div>
                 <div style="display: flex; flex-direction: row;align-items: stretch; justify-content: space-around;">
-                    <div class="col-md-6 sensor-data mb-5">
-                        <h2>Yakınlık Sensörü</h2>
+                    <div class="col-md-6 sensor-data mb-3">
+                        <h4>Yakınlık Sensörü</h4>
                         <div class="box sensor-box" id="proximity-box">
                             <p id="proximity-sensor">Sensör Değeri: </p>
                             <p>Kapıyı Aç </p>
-
-                            <div class="form-check" id="proximity-controls">
-                                <input class="form-check-input" type="radio" name="speed" id="slow" value="9" checked>
-                                <label class="form-check-label" for="slow">
-                                    Yavaş
-                                </label>
+                            <div class="ml-3">
+                                <div class="form-check" id="proximity-controls">
+                                    <input class="form-check-input" type="radio" name="speed" id="slow" value="9"
+                                        checked>
+                                    <label class="form-check-label" for="slow">
+                                        Yavaş
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
+                                    <label class="form-check-label" for="medium">
+                                        Orta
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
+                                    <label class="form-check-label" for="fast">
+                                        Hızlı
+                                    </label>
+                                </div>
+                                <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
-                                <label class="form-check-label" for="medium">
-                                    Orta
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
-                                <label class="form-check-label" for="fast">
-                                    Hızlı
-                                </label>
-                            </div>
-                            <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
                         </div>
                     </div>
 
                     <div class="col-md-6 sensor-data">
-                        <h2>Gaz Sensörü</h2>
+                        <h4>Gaz Sensörü</h4>
                         <div class="box sensor-box" id="gas-box">
                             <p id="gas-sensor">Sensör Değeri: </p>
                             <p>Fanı Ayarla</p>
-                            <div class="form-check" id="gas-controls">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="5"
-                                    checked>
-                                <label class="form-check-label" for="slow">
-                                    Yavaş
-                                </label>
+                            <div class="ml-3">
+                                <div class="form-check" id="gas-controls">
+                                    <input class="form-check-input" type="radio" name="gasSpeed" id="slow" value="5"
+                                        checked>
+                                    <label class="form-check-label" for="slow">
+                                        Yavaş
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="50">
+                                    <label class="form-check-label" for="medium">
+                                        Orta
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="100">
+                                    <label class="form-check-label" for="fast">
+                                        Hızlı
+                                    </label>
+                                </div>
+                                <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="medium" value="50">
-                                <label class="form-check-label" for="medium">
-                                    Orta
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="gasSpeed" id="fast" value="100">
-                                <label class="form-check-label" for="fast">
-                                    Hızlı
-                                </label>
-                            </div>
-                            <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
                         </div>
                     </div>
                 </div>
@@ -83,15 +85,15 @@
             <div class="mt-1">
                 <button class="btn btn-danger" id="startRecordingBtn">Kaydı Başlat</button>
                 <button class="btn btn-warning" id="stopRecordingBtn">Kaydı Durdur</button>
-                <button class="btn btn-primary" id="photo">Foto</button>
+                <a class="btn btn-primary" id="photo">Foto</a>
             </div>
         </div>
 
         <script>
             $(document).ready(function () {
-                checkRecordingStatus();
                 $("#stopRecordingBtn").prop("disabled", true);
 
+                checkRecordingStatus();
                 setInterval(checkRecordingStatus, 500);
 
                 function checkRecordingStatus() {
@@ -151,24 +153,13 @@
 
                 $("#photo").click(function () {
                     $.ajax({
-                        url: '/stream/CapturePhoto',
+                        url: '/Stream/CapturePhoto',
                         type: 'POST',
                         success: function (response) {
-                            if (response === "True") {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Done!",
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Error!",
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                });
-                            }
+                            debugger;
+                            $("#FileNamea").val(response.fileName);
+                            $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.fileName + ".png");
+                            $("#exampleModal").modal('show');
                         },
                         error: function () {
                             Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
@@ -176,10 +167,8 @@
                     });
                 });
             });
-        </script>
-        <script>
-            const imgElement = document.getElementById('streamImg');
-            imgElement.src = 'http://10.42.0.41:8000/stream.mjpg';
+            @* const imgElement = document.getElementById('streamImg');
+            imgElement.src = 'http://10.42.0.41:8000/stream.mjpg'; *@
         </script>
     </div>
 
@@ -302,7 +291,7 @@
         setInterval(function () {
             getProximitySensorData();
             getGasSensorData();
-        }, 3500);
+        }, 3500); 
     });
 
 </script>
@@ -311,6 +300,12 @@
     .highlight {
         background-color: red;
         color: black;
+    }
+
+    a:hover {
+        cursor: pointer;
+        color: #007bffa3 !important;
+        text-decoration: underline !important;
     }
 
     .box {
@@ -324,3 +319,45 @@
         margin-top: .3rem;
     }
 </style>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="SendMail" asp-controller="File" method="POST"
+                data-ajax="true"
+                data-ajax-success="OnAjaxSuccess"
+                data-ajax-failure="OnAjaxError">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mailModalLabel">Yeni Mail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="MailAddress" class="col-form-label">Alıcı:</label>
+                        <input type="text" class="form-control" id="MailAddress" name="MailAddress" value="test@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="FileNamea" class="col-form-label">Dosya:</label>
+                        <input type="text" readonly class="form-control" id="FileNamea" name="FileName" val="">
+                    </div>
+                    <div class="form-group">
+                        <img id="latestImg" class="img-fluid" src="" alt="Resim" />
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
