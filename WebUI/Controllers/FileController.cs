@@ -53,7 +53,7 @@ public class FileController : Controller
 
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
-                Credentials = new NetworkCredential("karunlander@gmail.com", ""),
+                Credentials = new NetworkCredential("karunlander@gmail.com", "yTYkztXNq5A6a9q"),
                 EnableSsl = true
             };
 

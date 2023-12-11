@@ -13,17 +13,6 @@ public class FileService
         string[] aviDosyalari = Directory.GetFiles("Media", "*.avi");
         string[] pngDosyalari = Directory.GetFiles("Media", "*.png");
 
-        foreach (string dosyaAdi in aviDosyalari)
-        {
-            FileModel fileModel = new()
-            {
-                Name = Path.GetFileNameWithoutExtension(dosyaAdi),
-                Extension = ".avi"
-            };
-
-            files.Add(fileModel);
-        }
-
         foreach (string dosyaAdi in pngDosyalari)
         {
             FileModel fileModel = new()
@@ -34,6 +23,18 @@ public class FileService
 
             files.Add(fileModel);
         }
+
+        foreach (string dosyaAdi in aviDosyalari)
+        {
+            FileModel fileModel = new()
+            {
+                Name = Path.GetFileNameWithoutExtension(dosyaAdi),
+                Extension = ".avi"
+            };
+
+            files.Add(fileModel);
+        }
+        files = files.OrderByDescending(f => int.Parse(Regex.Match(f.Name, @"\d+").Value)).ToList();
 
         return files;
     }

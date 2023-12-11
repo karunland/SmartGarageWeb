@@ -23,21 +23,21 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" style="f" asp-area="" asp-controller="Home" asp-action="Index">Smart Garage</a>
+                <a class="navbar-brand" style="f" asp-controller="Home" asp-action="Index">Smart Garage</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                @* <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="">About Project</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="">About Project</a>
                         </li>
                     </ul>
-                </div>
+                </div> *@
             </div>
         </nav>
     </header>
@@ -62,3 +62,9 @@
         font-family: "Lucida Console" !important;
     }
 </style>
+
+<script>
+    $(document).ready(function () {
+        document.documentElement.setAttribute('data-bs-theme','dark');
+    });
+</script>
