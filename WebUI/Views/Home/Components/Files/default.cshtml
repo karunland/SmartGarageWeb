@@ -1,8 +1,7 @@
 @using WebUI.Models
 
-@model IEnumerable<FileModel>
+@model List<FileModel>
 
-<div class="table-wrapper">
     <table class="table table-striped table-sm">
         <thead class="thead-dark">
             <tr>
@@ -20,14 +19,13 @@
                     <td>
                         @if (item.Extension == ".png")
                         {
-                            <a onclick='myFunction("@item.Name.ToString()")' style="text-decoration:underline !important;">Mail At</a>
+                            <a onclick='myFunction("@item.Name.ToString()")' style="text-decoration:underline !important;cursor: pointer;">Mail At</a>
                         }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
 
 <div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel"
     aria-hidden="true">

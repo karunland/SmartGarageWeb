@@ -9,13 +9,17 @@ namespace WebUI.Controllers;
 
 public class StreamController : Controller
 {
-    private static Process? videoProcess;
+    private static Process? videoProcess = null;
     private readonly FileService _fileService;
     private static Process? photoProcess;
+    private readonly IConfiguration _configuration;
+    private string Ip;
 
-    public StreamController(FileService fileService)
+    public StreamController(FileService fileService, IConfiguration configuration)
     {
         _fileService = fileService;
+        _configuration = configuration;
+        Ip = _configuration["IpAdress"];
     }
 
     [HttpPost]
@@ -30,7 +34,7 @@ public class StreamController : Controller
 
         string command = "ffmpeg";
         var fileName = _fileService.GetNewVideoFileName();
-        string arguments = $"-f mjpeg -r 24 -i \"http://10.42.0.41:8000/stream.mjpg\" -r 24 ./Media/{fileName}";
+        string arguments = $"-f mjpeg -r 24 -i \"{Ip}:8000/stream.mjpg\" -r 24 ./Media/{fileName}";
 
         // Yeni bir subprocess oluştur
         var startInfo = new ProcessStartInfo
@@ -100,7 +104,7 @@ public class StreamController : Controller
                 photoProcess.Kill();
             }
             var fileName = _fileService.GetNewPhotoFileName();
-            string ffmpegArgs = $"-i  \"http://10.42.0.41:8000/stream.mjpg\"  -vframes 1 -f image2 ./Media/{fileName}";
+            string ffmpegArgs = $"-i  \"{Ip}:8000/stream.mjpg\"  -vframes 1 -f image2 ./Media/{fileName}";
 
             ProcessStartInfo startInfo = new()
             {
@@ -144,6 +148,4 @@ public class StreamController : Controller
             });
         }
     }
-
-
 }

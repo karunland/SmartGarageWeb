@@ -101,7 +101,6 @@ public class FileService
         return newFileName;
     }
 
-
     public string GetLatestPhoto()
     {
         string folderPath = "Media";
@@ -109,7 +108,7 @@ public class FileService
 
         if (files.Length == 0)
         {
-            return "photo0.png";
+            return "photo0";
         }
 
         int maxNumber = 0;

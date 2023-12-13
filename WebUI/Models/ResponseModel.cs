@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace WebUI.Models;
 
 public class ApiResult : ApiResult<object>

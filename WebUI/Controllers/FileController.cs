@@ -2,12 +2,19 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Models;
+using WebUI.Services;
 
 namespace WebUI.Controllers;
 
 public class FileController : Controller
 {
     private const string MediaFolderPath = "./Media";
+    private readonly FileService _fileService;
+
+    public FileController(FileService fileService)
+    {
+        _fileService = fileService;
+    }
 
     [HttpGet]
     public IActionResult GetFile([FromQuery] string filePath)
@@ -75,4 +82,9 @@ public class FileController : Controller
         }
     }
 
+    [HttpGet]
+    public IActionResult ReloadEvents()
+    {
+        return ViewComponent("Files");
+    }
 }

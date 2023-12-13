@@ -1,9 +1,9 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
 
-<div class="container">
+<div class="container-fluid" style="max-width: 1500px;">
     <div class="col-12 d-flex justify-content-around align-items-stretch" style="height: 60vh;">
         <div class="col-md-6 col-sm-12 mx-5">
             <div>
@@ -33,7 +33,10 @@
                                         Hızlı
                                     </label>
                                 </div>
-                                <button class="btn btn-md btn-primary" id="send-proximity">Gönder</button>
+                                <div class="d-flex" style="justify-content: space-between;">
+                                    <button class="btn btn-sm btn-primary" id="open-door">Kapıyı Aç</button>
+                                    <button class="btn btn-sm btn-danger" id="close-door">Kapıyı Kapat</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,147 +66,128 @@
                                         Hızlı
                                     </label>
                                 </div>
-                                <button class="btn btn-md btn-primary" id="send-gas">Gönder</button>
+                                <button class="btn btn-sm btn-primary" id="send-gas">Fanı Ayarla</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div id="event" class="col-12">
                     @await Component.InvokeAsync("Files")
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 col-sm-12 mx-5" style="align-items: stretch;">
-            <div class="stream-container position-relative" style="min-width: auto;height: 480px;background: #ddd;">
+            <div class="stream-container position-relative" style="max-width: 640px;background: #ddd;">
                 <img id="streamImg" class="img-fluid">
                 <div id="recordingIndicator"
                     style="position: absolute;top: 0;right: 0;margin:15px;background: grey;padding: 10px;border-radius: 50%;">
                 </div>
             </div>
 
-            <div class="mt-1">
-                <button class="btn btn-danger" id="startRecordingBtn">Kaydı Başlat</button>
-                <button class="btn btn-warning" id="stopRecordingBtn">Kaydı Durdur</button>
-                <a class="btn btn-primary" id="photo">Foto</a>
+            <div class="mt-1 d-flex">
+                <div>
+                    <button class="btn btn-danger" id="startRecordingBtn">Kaydı Başlat</button>
+                    <button class="btn btn-warning" id="stopRecordingBtn">Kaydı Durdur</button>
+                </div>
+                <div style="margin-left: auto;margin-right: 50px;">
+                    <button class="btn btn-primary" id="photo">Fotoğraf çek <i class="fa-solid fa-camera fa-lg"></i></button>
+                </div>
             </div>
         </div>
-
-        <script>
-            $(document).ready(function () {
-                $("#stopRecordingBtn").prop("disabled", true);
-
-                checkRecordingStatus();
-                setInterval(checkRecordingStatus, 1000);
-
-                function checkRecordingStatus() {
-                    $.ajax({
-                        url: '/stream/checkRecordingStatus',
-                        type: 'GET',
-                        success: function (response) {
-                            if (response.isSuccess === "True") {
-                                $('#recordingIndicator').addClass('recording');
-                            } else {
-                                $('#recordingIndicator').removeClass('recording');
-                            }
-                        },
-                        error: function () {
-                            console.error('Durum alınamadı');
-                        }
-                    });
-                }
-
-                $("#startRecordingBtn").click(function () {
-                    $.ajax({
-                        url: '/stream/startRecording',
-                        type: 'POST',
-                        success: function (response) {
-                            if (response.isSuccess === "True") {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Başarılı!",
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 3000
-                                });
-                                $("#startRecordingBtn").prop("disabled", true);
-                                $("#stopRecordingBtn").prop("disabled", false);
-                            } else {
-                                Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
-                            }
-                        },
-                        error: function () {
-                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                        }
-                    });
-                });
-
-                $("#stopRecordingBtn").click(function () {
-                    $.ajax({
-                        url: '/stream/stopRecording',
-                        type: 'POST',
-                        success: function (response) {
-                            if (response.isSuccess === "True") {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Başarılı!",
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 3000
-                                });
-                                $("#startRecordingBtn").prop("disabled", false);
-                                $("#stopRecordingBtn").prop("disabled", true);
-                            } else {
-                                Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
-                            }
-                        },
-                        error: function () {
-                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                        }
-                    });
-                });
-
-                $("#photo").click(function () {
-                    $.ajax({
-                        url: '/Stream/CapturePhoto',
-                        type: 'POST',
-                        success: function (response) {
-                            debugger;
-                            if (response.isSuccess === true) {
-                                $("#FileNamea").val(response.data.fileName);
-                                $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
-                                $("#exampleModal").modal('show');
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Hata!",
-                                    text: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                })
-                            }
-                        },
-                        error: function () {
-                            Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                        }
-                    });
-                });
-            });
-            @* const imgElement = document.getElementById('streamImg');
-                imgElement.src = 'http://10.42.0.41:8000/stream.mjpg'; *@
-        </script>
     </div>
-
-
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="SendMail" asp-controller="File" method="POST" data-ajax="true"
+                data-ajax-success="OnAjaxSuccess" data-ajax-failure="OnAjaxError">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mailModalLabel">Yeni Mail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="MailAddress" class="col-form-label">Alıcı Mail Adresi:</label>
+                        <input type="text" class="form-control" id="MailAddress" name="MailAddress"
+                            value="test@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="FileNamea" class="col-form-label">Dosya Adı:</label>
+                        <input type="text" readonly class="form-control" id="FileNamea" name="FileName" val="">
+                    </div>
+                    <div class="form-group">
+                        <img id="latestImg" class="img-fluid" src="" alt="Resim" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Gönder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
         $(document).ready(function () {
+            $("#stopRecordingBtn").prop("disabled", true);
+            var IpAddress = "http://172.20.10.12";
+            checkRecordingStatus();
+            
+            $('#streamImg').attr('src', IpAddress + ':8000/stream.mjpg');
 
-            $('#send-proximity').click(function () {
+            setInterval(checkRecordingStatus, 1000);
+
+            setInterval(function () {
+                getProximitySensorData();
+                getGasSensorData();
+            }, 3500);
+
+            $('#open-door').click(function () {
                 var selectedSpeed = $('input[name="speed"]:checked').val();
+                $.post('/Home/OpenDoor', { speed: selectedSpeed })
+                    .done(function (response) {
+                        if (response.isSuccess === true) {
+                            console.log('İşlem başarıyla tamamlandı.');
+                            Swal.fire({
+                                icon: "success",
+                                title: "Başarılı!",
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        } else {
+                            console.log('İşlem tamamlanamadı.');
+                            Swal.fire({
+                                icon: "error",
+                                title: "Hata!",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        }
+                    })
+                    .fail(function (response) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Hata!",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    });
+            });
 
-                $.post('/Home/SendProximity', { speed: selectedSpeed })
+             $('#close-door').click(function () {
+                $.post('/Home/CloseDoor')
                     .done(function (response) {
                         if (response.isSuccess === true) {
                             console.log('İşlem başarıyla tamamlandı.');
@@ -269,7 +253,7 @@
             });
 
             function getProximitySensorData() {
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/hcsr04')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/hcsr04')
                     .done(function (data) {
                         console.log(data);
                         $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
@@ -285,7 +269,7 @@
             }
 
             function getGasSensorData() {
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/gas')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas')
                     .done(function (data) {
                         console.log(data);
                         if (data >= 1) {
@@ -300,7 +284,7 @@
             }
 
             function getGasSensorData() {
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/gas/0')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas/0')
                     .done(function (data) {
                         console.log(data);
                         $('#gas-sensor').text('Sensör Değeri: ' + data.sensor_value);
@@ -310,10 +294,115 @@
                     });
             }
 
-            setInterval(function () {
-                getProximitySensorData();
-                getGasSensorData();
-            }, 3500);
+            function checkRecordingStatus() {
+                $.ajax({
+                    url: '/stream/checkRecordingStatus',
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.isSuccess === true) {
+                            $('#recordingIndicator').addClass('recording');
+                        } else {
+                            $('#recordingIndicator').removeClass('recording');
+                        }
+                    },
+                    error: function () {
+                        console.error('Durum alınamadı');
+                    }
+                });
+            }
+
+            $("#startRecordingBtn").click(function () {
+                $.ajax({
+                    url: '/stream/startRecording',
+                    type: 'POST',
+                    success: function (response) {
+                        debugger;
+                        if (response.isSuccess === true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Başarılı!",
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            $("#startRecordingBtn").prop("disabled", true);
+                            $("#stopRecordingBtn").prop("disabled", false);
+                        } else {
+                            Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                    }
+                });
+            });
+
+            $("#stopRecordingBtn").click(function () {
+                $.ajax({
+                    url: '/stream/stopRecording',
+                    type: 'POST',
+                    success: function (response) {
+                        debugger;
+                        if (response.isSuccess === true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Başarılı!",
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            $("#startRecordingBtn").prop("disabled", false);
+                            $("#stopRecordingBtn").prop("disabled", true);
+                        } else {
+                            Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                    }
+                });
+            });
+            
+            function refreshComponent() {
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ReloadEvents", "File")',
+                    success: function(data) {
+                        debugger;
+                        $('#event').html(data);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            $("#photo").click(function () {
+                $.ajax({
+                    url: '/Stream/CapturePhoto',
+                    type: 'POST',
+                    success: function (response) {
+                        debugger;
+                        if (response.isSuccess === true) {
+                            $("#FileNamea").val(response.data.fileName);
+                            $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
+                            refreshComponent();
+                            @* $("#exampleModal").modal('show'); *@
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Hata!",
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                    }
+                });
+            });
         });
 
 </script>
@@ -325,8 +414,6 @@
     }
 
     a:hover {
-        cursor: pointer;
-        color: #007bffa3 !important;
         text-decoration: underline !important;
     }
 
@@ -345,41 +432,3 @@
         background: red !important;
     }
 </style>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form asp-action="SendMail" asp-controller="File" method="POST" data-ajax="true"
-                data-ajax-success="OnAjaxSuccess" data-ajax-failure="OnAjaxError">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mailModalLabel">Yeni Mail</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="MailAddress" class="col-form-label">Alıcı Mail Adresi:</label>
-                        <input type="text" class="form-control" id="MailAddress" name="MailAddress"
-                            value="test@gmail.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="FileNamea" class="col-form-label">Dosya Adı:</label>
-                        <input type="text" readonly class="form-control" id="FileNamea" name="FileName" val="">
-                    </div>
-                    <div class="form-group">
-                        <img id="latestImg" class="img-fluid" src="" alt="Resim" />
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Gönder</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>

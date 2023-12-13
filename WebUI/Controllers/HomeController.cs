@@ -8,29 +8,35 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClient _httpClient;
+    private readonly IConfiguration _configuration;
+    private string Ip;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
+        Ip = _configuration["IpAdress"];
+
         _httpClient = new HttpClient
         {
-            BaseAddress = new Uri("http://10.42.0.41:5000/flask/")
+            BaseAddress = new Uri(Ip + ":5000/flask/")
         };
     }
 
     public IActionResult Index()
     {
+        ViewBag.Ip = Ip;
         return View();
     }
 
     [HttpPost]
-    public async Task<ActionResult> SendProximity(string speed)
+    public async Task<ActionResult> OpenDoor(string speed)
     {
         var formData = new MultipartFormDataContent();
         formData.Add(new StringContent(speed), "speed");
         try
         {
-            var response = await _httpClient.PostAsync("set/servo", formData);
+            var response = await _httpClient.PostAsync("set/servo-open", formData);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -39,7 +45,7 @@ public class HomeController : Controller
                     return Ok(new ApiResult
                     {
                         IsSuccess = true,
-                        Message = "Servo hareket ettirildi"
+                        Message = "Kapı Açıldı"
                     });
                 }
             }
@@ -51,7 +57,37 @@ public class HomeController : Controller
         return Ok(new ApiResult
         {
             IsSuccess = false,
-            Message = "Servo hareket ettirilemedi"
+            Message = "Kapı Açılamadı"
+        });
+    }
+
+    [HttpPost]
+     public async Task<ActionResult> CloseDoor()
+    {
+        try
+        {
+            var response = await _httpClient.PostAsync("set/just-close", null);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (responseContent == "1")
+                {
+                    return Ok(new ApiResult
+                    {
+                        IsSuccess = true,
+                        Message = "Kapı Kapatıldı"
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return Ok(new ApiResult
+        {
+            IsSuccess = false,
+            Message = "Kapı Kapatılamadı"
         });
     }
 
@@ -62,7 +98,7 @@ public class HomeController : Controller
         formData.Add(new StringContent(gasSpeed), "speed");
         try
         {
-            var response = await _httpClient.PostAsync("set/servo", formData);
+            var response = await _httpClient.PostAsync("set/fan", formData);
 
             if (response.IsSuccessStatusCode)
             {
@@ -74,7 +110,7 @@ public class HomeController : Controller
                         return Ok(new ApiResult
                         {
                             IsSuccess = true,
-                            Message = "Fan hareket ettirildi"
+                            Message = "Fan hızı değiştirildi"
                         });
                     }
                 }
@@ -87,7 +123,7 @@ public class HomeController : Controller
         return Ok(new ApiResult
         {
             IsSuccess = false,
-            Message = "Fan hareket ettirilemedi"
+            Message = "Fan hızı değiştirilemedi"
         });
     }
     
