@@ -362,11 +362,11 @@
                     }
                 });
             });
-            
+
             function refreshComponent() {
                 $.ajax({
                     type: 'GET',
-                    url: '@Url.Action("ReloadEvents", "File")',
+                    url: '/File/ReloadEvents',
                     success: function(data) {
                         debugger;
                         $('#event').html(data);
@@ -386,8 +386,8 @@
                         if (response.isSuccess === true) {
                             $("#FileNamea").val(response.data.fileName);
                             $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
+                            $("#exampleModal").modal('show');
                             refreshComponent();
-                            @* $("#exampleModal").modal('show'); *@
                         } else {
                             Swal.fire({
                                 icon: "error",
