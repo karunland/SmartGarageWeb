@@ -10,10 +10,12 @@ public class FileController : Controller
 {
     private const string MediaFolderPath = "./Media";
     private readonly FileService _fileService;
+    private readonly IConfiguration _configuration;
 
-    public FileController(FileService fileService)
+    public FileController(FileService fileService, IConfiguration configuration)
     {
         _fileService = fileService;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -38,12 +40,13 @@ public class FileController : Controller
         }
     }
 
+
     [HttpPost]
-    public async  Task<IActionResult> SendMail(MailModel mailModel)
+    public async Task<IActionResult> SendMail(MailModel mailModel)
     {
         try
         {
-            string fullFilePath = Path.Combine(MediaFolderPath, mailModel.FileName+".png");
+            string fullFilePath = Path.Combine(MediaFolderPath, mailModel.FileName + ".png");
 
             if (!System.IO.File.Exists(fullFilePath))
             {
@@ -56,15 +59,30 @@ public class FileController : Controller
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(fullFilePath);
 
-            var file = Convert.ToBase64String(fileBytes);
+            var senderEmail = _configuration["SmtpSettings:SenderEmail"];
+            var password = _configuration["SmtpSettings:Password"];
+            var receiver = mailModel.MailAddress;
 
-            var client = new SmtpClient("smtp.gmail.com", 587)
+            using (var message = new MailMessage(senderEmail, receiver)
             {
-                Credentials = new NetworkCredential("karunlander@gmail.com", "yTYkztXNq5A6a9q"),
-                EnableSsl = true
-            };
+                Subject = "Smart Garage - Güvenli Kamerası",
+                Body = "Fotoğrafınız ektedir."
+            })
+            {
+                using (var ms = new MemoryStream(fileBytes))
+                {
+                    message.Attachments.Add(new Attachment(ms, mailModel.FileName + ".png"));
+                    using (var client = new SmtpClient())
+                    {
+                        client.EnableSsl = false;
+                        client.Credentials = new NetworkCredential(senderEmail, password);
+                        client.Host = _configuration["SmtpSettings:Host"];
+                        client.Port = int.Parse(_configuration["SmtpSettings:Port"]);
 
-            // client.SendAsync("mail", mailModel.MailAddress, "Güvenlik Kamerası", "Güvenlik Kamerası", file);
+                        await client.SendMailAsync(message);
+                    }
+                }
+            }
 
             return Ok(new ApiResult
             {
@@ -81,6 +99,7 @@ public class FileController : Controller
             });
         }
     }
+
 
     [HttpGet]
     public IActionResult ReloadEvents()
