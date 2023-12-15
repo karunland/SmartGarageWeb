@@ -14,16 +14,37 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.Extension</td>
-                    <td>@item.Name</td>
-                    <td>
-                        @if (item.Extension == ".png")
-                        {
+                @if (item.Extension == ".png")
+                {
+                    <tr class="table-primary">
+                        <td>@item.Extension</td>
+                        <td>@item.Name</td>
+                        <td>
                             <a onclick='myFunction("@item.Name.ToString()")' style="text-decoration:underline !important;cursor: pointer;">Mail At</a>
-                        }
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="table-secondary">
+                        <td>@item.Extension</td>
+                        <td>@item.Name</td>
+                        <td>
+                        </td>
+                    </tr>
+                }
+            }
+
+            @if (Model.Count < 8)
+            {
+                for (int i = 0; i < 8 - Model.Count; i++)
+                {
+                    <tr style="height: 34px;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
