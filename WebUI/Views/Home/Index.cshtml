@@ -341,6 +341,7 @@
                             });
                             $("#startRecordingBtn").prop("disabled", false);
                             $("#stopRecordingBtn").prop("disabled", true);
+                            refreshComponent();
                         } else {
                             Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
                         }
