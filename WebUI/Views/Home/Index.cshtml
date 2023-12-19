@@ -351,12 +351,27 @@
                 });
             });
 
+            function refreshComponent() {
+                debugger;
+                $.ajax({
+                    type: 'GET',
+                    url: '/File/ReloadEvents',
+                    success: function(data) {
+                        debugger;
+                        console.log(data); 
+                        $('#event').html(data);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
             $("#photo").click(function () {
                 $.ajax({
                     url: '/Stream/CapturePhoto',
                     type: 'POST',
                     success: function (response) {
-                        debugger;
                         if (response.isSuccess === true) {
                             $("#FileNamea").val(response.data.fileName);
                             $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
@@ -378,28 +393,12 @@
                 });
             });
 
-
-
             $("#stopRecordingBtn").prop("disabled", true);
             var IpAddress = "http://10.42.0.41";
             
             checkRecordingStatus();
             
             $('#streamImg').attr('src', IpAddress + ':8000/stream.mjpg');
-
-            function refreshComponent() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/File/ReloadEvents',
-                    success: function(data) {
-                        debugger;
-                        $('#event').html(data);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
 
             setInterval(checkRecordingStatus, 1000);
 
