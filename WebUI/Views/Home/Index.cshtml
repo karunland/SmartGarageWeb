@@ -14,21 +14,20 @@
                             <p id="proximity-sensor">Sensör Değeri: </p>
                             <p>Kapıyı Aç </p>
                             <div class="ml-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="speed" id="medium" value="45" disabled>
+                                    <label class="form-check-label" for="medium">
+                                    </label>
+                                </div>
                                 <div class="form-check" id="proximity-controls">
-                                    <input class="form-check-input" type="radio" name="speed" id="slow" value="9"
+                                    <input class="form-check-input" type="radio" name="speed" id="slow" value="30"
                                         checked>
                                     <label class="form-check-label" for="slow">
                                         Yavaş
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="speed" id="medium" value="15">
-                                    <label class="form-check-label" for="medium">
-                                        Orta
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="speed" id="fast" value="30">
+                                    <input class="form-check-input" type="radio" name="speed" id="fast" value="91">
                                     <label class="form-check-label" for="fast">
                                         Hızlı
                                     </label>
@@ -77,7 +76,8 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-sm-12 mx-5" style="align-items: stretch;">
+        <div class="col-md-6 col-sm-12 mx-5">
+            <h4>Kamera</h4>
             <div class="stream-container position-relative" style="max-width: 640px;background: #ddd;min-height: 480px;">
                 <img id="streamImg" class="img-fluid">
                 <div id="recordingIndicator"
