@@ -62,7 +62,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-     public async Task<ActionResult> CloseDoor()
+    public async Task<ActionResult> CloseDoor()
     {
         try
         {
@@ -102,18 +102,12 @@ public class HomeController : Controller
 
             if (response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return Ok(new ApiResult
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    if (responseContent == "1")
-                    {
-                        return Ok(new ApiResult
-                        {
-                            IsSuccess = true,
-                            Message = "Fan hızı değiştirildi"
-                        });
-                    }
-                }
+                    IsSuccess = true,
+                    Message = responseContent
+                });
             }
         }
         catch (Exception ex)
@@ -126,7 +120,7 @@ public class HomeController : Controller
             Message = "Fan hızı değiştirilemedi"
         });
     }
-    
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

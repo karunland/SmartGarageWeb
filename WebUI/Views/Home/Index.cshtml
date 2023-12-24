@@ -242,7 +242,7 @@
 
             function getProximitySensorData() {
                 // 172.20.10.12
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/hcsr04')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/hcsr04')
                     .done(function (data) {
                         console.log(data);
                         $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
@@ -258,7 +258,7 @@
             }
 
             function getGasSensorData() {
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/gas')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas')
                     .done(function (data) {
                         console.log(data);
                         if (data != 0) {
@@ -273,7 +273,7 @@
             }
 
             function getGasSensorDataI2C() {
-                $.getJSON('http://10.42.0.41:5000/flask/sensor/gas/0')
+                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas/0')
                     .done(function (data) {
                         console.log(data);
                         $('#gas-sensor').text('Sensör Değeri: ' + data.sensor_value);
@@ -396,7 +396,7 @@
             });
 
             $("#stopRecordingBtn").prop("disabled", true);
-            var IpAddress = "http://10.42.0.41";
+            var IpAddress = "http://172.20.10.12";
             
             checkRecordingStatus();
             
