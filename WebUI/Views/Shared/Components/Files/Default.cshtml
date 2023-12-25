@@ -8,36 +8,30 @@
             <tr>
                 <th scope="col">Dosya Türü</th>
                 <th scope="col">Dosya Adı</th>
+                <th scope="col">Oluşturulma Tarihi</th>
                 <th scope="col">İşlem</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                @if (item.Extension == ".png")
-                {
-                    <tr class="table-primary">
-                        <td>@item.Extension</td>
-                        <td>@item.Name</td>
-                        <td>
+                <tr class="table-primary">
+                    <td>@item.Extension</td>
+                    <td>@item.Name</td>
+                    <td>@item.CreatedDate.ToString("dd MMMM yyyy HH:mm")</td>
+                    <td>
+                        <a onclick='DeleteFile("@item.FullName.ToString()")' class="mx-2 deleteButton"><i class="fa-solid fa-trash"></i></a>
+                        @if (item.Extension == ".png")
+                        {
                             <a onclick='myFunction("@item.Name.ToString()")' style="text-decoration:underline !important;cursor: pointer;">Mail At</a>
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    <tr class="table-secondary">
-                        <td>@item.Extension</td>
-                        <td>@item.Name</td>
-                        <td>
-                        </td>
-                    </tr>
-                }
+                        }
+                    </td>
+                </tr>
             }
 
-            @if (Model.Count < 8)
+            @if (Model.Count < 9)
             {
-                for (int i = 0; i < 8 - Model.Count; i++)
+                for (int i = 0; i < 9 - Model.Count; i++)
                 {
                     <tr style="height: 34px;">
                         <td></td>
@@ -50,15 +44,14 @@
     </table>
 </div>
 
-<div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form asp-action="SendMail" asp-controller="File" method="POST"
+            <form asp-action="SendMail" asp-controller="File" method="POST" 
                 data-ajax="true"
                 data-ajax-success="OnAjaxSuccess"
                 data-ajax-failure="OnAjaxError">
-                
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="mailModalLabel">Yeni Mail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -67,12 +60,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="MailAddress" class="col-form-label">Alıcı Mail Adresi:</label>
-                        <input type="text" class="form-control" id="MailAddress" name="MailAddress" value="1harunkorkmaz@gmail.com">
+                        <label for="MailAddress" class="form-label">Alıcı Mail Adresi:</label>
+                        <input type="text" class="form-control" id="MailAddress" name="MailAddress"
+                            value="1harunkorkmaz@gmail.com">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Dosya Adı:</label>
+                        <label for="message-text" class="form-label">Dosya Adı:</label>
                         <input type="text" class="form-control" readonly id="FileName" val="" name="FileName">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="form-label">Gönderen Mail Adres:</label>
+                        <input type="text" class="form-control" readonly value="harun.korkmaz@diginova.com.tr">
                     </div>
                     <div class="form-group">
                         <img id="imgInput" class="img-fluid" src="" alt="Resim" />
@@ -94,6 +92,62 @@
         $("#FileName").val(val);
         $("#mailModal").modal("show");
     }
+    
+    function refreshComponent() {
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: '/File/ReloadEvents',
+            success: function(data) {
+                debugger;
+                console.log(data); 
+                $('#event').html(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+    
+    function DeleteFile(fileName) {
+        Swal.fire({
+            title: "Emin misiniz?",
+            text: "Dosyayı silmek istediğinize emin misiniz?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Evet",
+            cancelButtonText: "Hayır"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "/File/DeleteFile/",
+                    data: { fileName: fileName },
+                    success: function (response) {
+                        debugger;
+                        if (response.isSuccess === true) {
+                            refreshComponent();
+                            swal.fire({
+                                title: "Başarılı",
+                                text: "Dosya başarıyla silindi.",
+                                icon: "success",
+                                confirmButtonText: "Tamam"
+                            });
+                        }
+                        else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Hata!",
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>
 
 <style>
@@ -101,5 +155,11 @@
         overflow-x: auto;
         overflow-y: auto;
         max-height: 336px;
+    }
+
+    .deleteButton {
+        color: red;
+        text-decoration:underline !important;
+        cursor: pointer;
     }
 </style>

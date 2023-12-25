@@ -10,26 +10,30 @@ public class FileService
     {
         List<FileModel> files = [];
 
-        string[] aviDosyalari = Directory.GetFiles("Media", "*.avi");
-        string[] pngDosyalari = Directory.GetFiles("Media", "*.png");
+        string[] videos = Directory.GetFiles("Media", "*.avi");
+        string[] pictures = Directory.GetFiles("Media", "*.png");
 
-        foreach (string dosyaAdi in pngDosyalari)
+        foreach (string picture in pictures)
         {
             FileModel fileModel = new()
             {
-                Name = Path.GetFileNameWithoutExtension(dosyaAdi),
-                Extension = ".png"
+                Name = Path.GetFileNameWithoutExtension(picture),
+                Extension = ".png",
+                FullName = $"{Path.GetFileNameWithoutExtension(picture)}.png",
+                CreatedDate = File.GetCreationTime(picture)
             };
 
             files.Add(fileModel);
         }
 
-        foreach (string dosyaAdi in aviDosyalari)
+        foreach (string video in videos)
         {
             FileModel fileModel = new()
             {
-                Name = Path.GetFileNameWithoutExtension(dosyaAdi),
-                Extension = ".avi"
+                Name = Path.GetFileNameWithoutExtension(video),
+                Extension = ".avi",
+                FullName = $"{Path.GetFileNameWithoutExtension(video)}.avi",
+                CreatedDate = File.GetCreationTime(video)
             };
 
             files.Add(fileModel);
@@ -128,5 +132,29 @@ public class FileService
         }
 
         return $"photo{maxNumber}";
+    }
+
+    public ApiResult DeleteFile(string fileName)
+    {
+        string folderPath = "Media";
+        string filePath = Path.Combine(folderPath, fileName);
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            return new ApiResult
+            {
+                IsSuccess = true,
+                Message = "Dosya silindi"
+            };
+        }
+        else
+        {
+            return new ApiResult
+            {
+                IsSuccess = false,
+                Message = "Dosya bulunamadı"
+            };
+        }
     }
 }

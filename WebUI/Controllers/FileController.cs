@@ -106,4 +106,16 @@ public class FileController : Controller
     {
         return ViewComponent("Files");
     }
+
+    [HttpPost]
+    public IActionResult DeleteFile(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+            return Ok(new ApiResult
+            {
+                IsSuccess = false,
+                Message = "Dosya adı boş olamaz"
+            });
+        return Ok(_fileService.DeleteFile(fileName));
+    }
 }
