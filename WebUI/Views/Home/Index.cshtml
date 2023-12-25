@@ -143,299 +143,299 @@
 
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": true,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "300",
-                "timeOut": "1500",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "300",
+            "timeOut": "1500",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
 
-            $('#open-door').click(function () {
-                var selectedSpeed = $('input[name="speed"]:checked').val();
-                $.post('/Home/OpenDoor', { speed: selectedSpeed })
-                    .done(function (response) {
-                        if (response.isSuccess === true) {
-                            console.log('İşlem başarıyla tamamlandı.');
-                            Swal.fire({
-                                icon: "success",
-                                title: "Başarılı!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        } else {
-                            console.log('İşlem tamamlanamadı.');
-                            Swal.fire({
-                                icon: "error",
-                                title: "Hata!",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    })
-                    .fail(function (response) {
+        $('#open-door').click(function () {
+            var selectedSpeed = $('input[name="speed"]:checked').val();
+            $.post('/Home/OpenDoor', { speed: selectedSpeed })
+                .done(function (response) {
+                    if (response.isSuccess === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Başarılı!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
                         Swal.fire({
                             icon: "error",
                             title: "Hata!",
                             showConfirmButton: false,
                             timer: 2000
                         });
+                    }
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Hata!",
+                        showConfirmButton: false,
+                        timer: 2000
                     });
-            });
+                });
+        });
 
-            $('#close-door').click(function () {
-                $.post('/Home/CloseDoor')
-                    .done(function (response) {
-                        if (response.isSuccess === true) {
-                            console.log('İşlem başarıyla tamamlandı.');
-                            Swal.fire({
-                                icon: "success",
-                                title: "Başarılı!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        } else {
-                            console.log('İşlem tamamlanamadı.');
-                            Swal.fire({
-                                icon: "error",
-                                title: "Hata!",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    })
-                    .fail(function (response) {
+        $('#close-door').click(function () {
+            $.post('/Home/CloseDoor')
+                .done(function (response) {
+                    if (response.isSuccess === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Başarılı!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
                         Swal.fire({
                             icon: "error",
                             title: "Hata!",
                             showConfirmButton: false,
                             timer: 2000
                         });
+                    }
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Hata!",
+                        showConfirmButton: false,
+                        timer: 2000
                     });
-            });
+                });
+        });
 
-            $('#send-gas').click(function () {
-                var selectedGasSpeed = $('input[name="gasSpeed"]:checked').val();
+        $('#send-gas').click(function () {
+            var selectedGasSpeed = $('input[name="gasSpeed"]:checked').val();
 
-                $.post('/Home/SendGas', { gasSpeed: selectedGasSpeed })
-                    .done(function (response) {
-                        if (response.isSuccess === true) {
-                            console.log('İşlem başarıyla tamamlandı.');
-                            Swal.fire({
-                                icon: "success",
-                                title: "Başarılı!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        } else {
-                            console.log('İşlem tamamlanamadı.');
-                            Swal.fire({
-                                icon: "error",
-                                title: "Error!",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        }
-                    })
-                    .fail(function (response) {
+            $.post('/Home/SendGas', { gasSpeed: selectedGasSpeed })
+                .done(function (response) {
+                    if (response.isSuccess === true) {
+                        console.log('İşlem başarıyla tamamlandı.');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Başarılı!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        console.log('İşlem tamamlanamadı.');
                         Swal.fire({
                             icon: "error",
                             title: "Error!",
                             showConfirmButton: false,
                             timer: 2000
                         });
+                    }
+                })
+                .fail(function (response) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        showConfirmButton: false,
+                        timer: 2000
                     });
-            });
-
-            function getProximitySensorData() {
-                // 172.20.10.12
-                // 10.42.0.41
-                $.getJSON('http://172.20.10.12:5000/flask/sensor/hcsr04')
-                    .done(function (data) {
-                        console.log(data);
-                        $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
-                        if (data <= 20) {
-                            $('#proximity-box').addClass('highlight');
-                            toastr["error"]("Kapıya Araç Yaklaştı!", "Yakınlık Sensörü");
-                        } else {
-                            $('#proximity-box').removeClass('highlight');
-                        }
-                    })
-                    .fail(function () {
-                        console.error('Yakınlık sensörü verileri alınamadı.');
-                    });
-            }
-
-            function getGasSensorData() {
-                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas')
-                    .done(function (data) {
-                        console.log(data);
-                        if (data != 0) {
-                            $('#gas-box').removeClass('highlight');
-                        } else {
-                            $('#gas-box').addClass('highlight');
-                            toastr["error"]("Gas Algılandı! Fanı Çalıştırın!", "Gaz Sensörü");
-                        }
-                    })
-                    .fail(function () {
-                        console.error('Gaz sensörü verileri alınamadı.');
-                    });
-            }
-
-            function getGasSensorDataI2C() {
-                $.getJSON('http://172.20.10.12:5000/flask/sensor/gas/0')
-                    .done(function (data) {
-                        console.log(data);
-                        $('#gas-sensor').text('Sensör Değeri: ' + data.sensor_value);
-                    })
-                    .fail(function () {
-                        console.error('Gaz sensörü I2C verileri alınamadı.');
-                    });
-            }
-
-            function checkRecordingStatus() {
-                $.ajax({
-                    url: '/stream/checkRecordingStatus',
-                    type: 'GET',
-                    success: function (response) {
-                        if (response.isSuccess === true) {
-                            $('#recordingIndicator').addClass('recording');
-                        } else {
-                            $('#recordingIndicator').removeClass('recording');
-                        }
-                    },
-                    error: function () {
-                        console.error('Durum alınamadı');
-                    }
                 });
-            }
-
-            $("#startRecordingBtn").click(function () {
-                $.ajax({
-                    url: '/stream/startRecording',
-                    type: 'POST',
-                    success: function (response) {
-                        debugger;
-                        if (response.isSuccess === true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Başarılı!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            $("#startRecordingBtn").prop("disabled", true);
-                            $("#stopRecordingBtn").prop("disabled", false);
-                        } else {
-                            Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                    }
-                });
-            });
-
-            $("#stopRecordingBtn").click(function () {
-                $.ajax({
-                    url: '/stream/stopRecording',
-                    type: 'POST',
-                    success: function (response) {
-                        debugger;
-                        if (response.isSuccess === true) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Başarılı!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            $("#startRecordingBtn").prop("disabled", false);
-                            $("#stopRecordingBtn").prop("disabled", true);
-                            refreshComponent();
-                        } else {
-                            Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                    }
-                });
-            });
-
-            function refreshComponent() {
-                debugger;
-                $.ajax({
-                    type: 'GET',
-                    url: '/File/ReloadEvents',
-                    success: function(data) {
-                        debugger;
-                        console.log(data); 
-                        $('#event').html(data);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-
-            $("#photo").click(function () {
-                $.ajax({
-                    url: '/Stream/CapturePhoto',
-                    type: 'POST',
-                    success: function (response) {
-                        if (response.isSuccess === true) {
-                            $("#FileNamea").val(response.data.fileName);
-                            $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
-                            $("#exampleModal").modal('show');
-                            refreshComponent();
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Hata!",
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            })
-                        }
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
-                    }
-                });
-            });
-
-            $("#stopRecordingBtn").prop("disabled", true);
-            var IpAddress = "http://172.20.10.12";
-            
-            checkRecordingStatus();
-            
-            $('#streamImg').attr('src', IpAddress + ':8000/stream.mjpg');
-
-            setInterval(checkRecordingStatus, 1000);
-
-            setInterval(function () {
-                getProximitySensorData();
-                getGasSensorData();
-                getGasSensorDataI2C();
-            }, 3500);
-
         });
+
+        function getProximitySensorData() {
+            // 172.20.10.12
+            // 10.42.0.41
+            $.getJSON('http://172.20.10.12:5000/flask/sensor/hcsr04')
+                .done(function (data) {
+                    console.log(data);
+                    $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
+                    if (data <= 20) {
+                        $('#proximity-box').addClass('highlight');
+                        toastr["error"]("Kapıya Araç Yaklaştı!", "Yakınlık Sensörü");
+                    } else {
+                        $('#proximity-box').removeClass('highlight');
+                    }
+                })
+                .fail(function () {
+                    console.error('Yakınlık sensörü verileri alınamadı.');
+                });
+        }
+
+        function getGasSensorData() {
+            $.getJSON('http://172.20.10.12:5000/flask/sensor/gas')
+                .done(function (data) {
+                    console.log(data);
+                    if (data != 0) {
+                        $('#gas-box').removeClass('highlight');
+                    } else {
+                        $('#gas-box').addClass('highlight');
+                        toastr["error"]("Gas Algılandı! Fanı Çalıştırın!", "Gaz Sensörü");
+                    }
+                })
+                .fail(function () {
+                    console.error('Gaz sensörü verileri alınamadı.');
+                });
+        }
+
+        function getGasSensorDataI2C() {
+            $.getJSON('http://172.20.10.12:5000/flask/sensor/gas/0')
+                .done(function (data) {
+                    console.log(data);
+                    $('#gas-sensor').text('Sensör Değeri: ' + data.sensor_value);
+                })
+                .fail(function () {
+                    console.error('Gaz sensörü I2C verileri alınamadı.');
+                });
+        }
+
+        function checkRecordingStatus() {
+            $.ajax({
+                url: '/stream/checkRecordingStatus',
+                type: 'GET',
+                success: function (response) {
+                    if (response.isSuccess === true) {
+                        $('#recordingIndicator').addClass('recording');
+                    } else {
+                        $('#recordingIndicator').removeClass('recording');
+                    }
+                },
+                error: function () {
+                    console.error('Durum alınamadı');
+                }
+            });
+        }
+
+        $("#startRecordingBtn").click(function () {
+            $.ajax({
+                url: '/stream/startRecording',
+                type: 'POST',
+                success: function (response) {
+                    debugger;
+                    if (response.isSuccess === true) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Başarılı!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        $("#startRecordingBtn").prop("disabled", true);
+                        $("#stopRecordingBtn").prop("disabled", false);
+                    } else {
+                        Swal.fire('Hata', 'Kayıt başlatılamadı!', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                }
+            });
+        });
+
+        $("#stopRecordingBtn").click(function () {
+            $.ajax({
+                url: '/stream/stopRecording',
+                type: 'POST',
+                success: function (response) {
+                    debugger;
+                    if (response.isSuccess === true) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Başarılı!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        $("#startRecordingBtn").prop("disabled", false);
+                        $("#stopRecordingBtn").prop("disabled", true);
+                        refreshComponent();
+                    } else {
+                        Swal.fire('Hata', 'Kayıt durdurulamadı!', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                }
+            });
+        });
+
+        function refreshComponent() {
+            debugger;
+            $.ajax({
+                type: 'GET',
+                url: '/File/ReloadEvents',
+                success: function(data) {
+                    debugger;
+                    console.log(data); 
+                    $('#event').html(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $("#photo").click(function () {
+            $.ajax({
+                url: '/Stream/CapturePhoto',
+                type: 'POST',
+                success: function (response) {
+                    if (response.isSuccess === true) {
+                        $("#FileNamea").val(response.data.fileName);
+                        $("#latestImg").attr("src", "/File/GetFile?filePath=" + response.data.fileName + ".png");
+                        $("#exampleModal").modal('show');
+                        refreshComponent();
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Hata!",
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    }
+                },
+                error: function () {
+                    Swal.fire('Hata', 'İstek gönderilirken bir hata oluştu!', 'error');
+                }
+            });
+        });
+
+        $("#stopRecordingBtn").prop("disabled", true);
+        var IpAddress = "http://172.20.10.12";
+        
+        checkRecordingStatus();
+        
+        $('#streamImg').attr('src', IpAddress + ':8000/stream.mjpg');
+
+        setInterval(checkRecordingStatus, 1000);
+
+        setInterval(function () {
+            getProximitySensorData();
+            getGasSensorData();
+            getGasSensorDataI2C();
+        }, 3500);
+
+    });
 
 </script>
 
