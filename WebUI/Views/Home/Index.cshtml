@@ -145,6 +145,24 @@
 <script>
         $(document).ready(function () {
 
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "300",
+                "timeOut": "1500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
             $('#open-door').click(function () {
                 var selectedSpeed = $('input[name="speed"]:checked').val();
                 $.post('/Home/OpenDoor', { speed: selectedSpeed })
@@ -156,7 +174,7 @@
                                 title: "Başarılı!",
                                 text: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 2000
                             });
                         } else {
                             console.log('İşlem tamamlanamadı.');
@@ -188,7 +206,7 @@
                                 title: "Başarılı!",
                                 text: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 2000
                             });
                         } else {
                             console.log('İşlem tamamlanamadı.');
@@ -222,7 +240,7 @@
                                 title: "Başarılı!",
                                 text: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 2000
                             });
                         } else {
                             console.log('İşlem tamamlanamadı.');
@@ -246,12 +264,14 @@
 
             function getProximitySensorData() {
                 // 172.20.10.12
+                // 10.42.0.41
                 $.getJSON('http://172.20.10.12:5000/flask/sensor/hcsr04')
                     .done(function (data) {
                         console.log(data);
                         $('#proximity-sensor').text('Sensör Değeri: ' + data + " cm");
                         if (data <= 20) {
                             $('#proximity-box').addClass('highlight');
+                            toastr["error"]("Kapıya Araç Yaklaştı!", "Yakınlık Sensörü");
                         } else {
                             $('#proximity-box').removeClass('highlight');
                         }
@@ -269,6 +289,7 @@
                             $('#gas-box').removeClass('highlight');
                         } else {
                             $('#gas-box').addClass('highlight');
+                            toastr["error"]("Gas Algılandı! Fanı Çalıştırın!", "Gaz Sensörü");
                         }
                     })
                     .fail(function () {
@@ -316,7 +337,7 @@
                                 title: "Başarılı!",
                                 text: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 2000
                             });
                             $("#startRecordingBtn").prop("disabled", true);
                             $("#stopRecordingBtn").prop("disabled", false);
@@ -342,7 +363,7 @@
                                 title: "Başarılı!",
                                 text: response.message,
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 2000
                             });
                             $("#startRecordingBtn").prop("disabled", false);
                             $("#stopRecordingBtn").prop("disabled", true);
