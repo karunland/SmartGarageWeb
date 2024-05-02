@@ -92,10 +92,10 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> SendGas(string gasSpeed)
+    public async Task<ActionResult> SendGasSpeed(string fanSpeed)
     {
         var formData = new MultipartFormDataContent();
-        formData.Add(new StringContent(gasSpeed), "speed");
+        formData.Add(new StringContent(fanSpeed), "speed");
         try
         {
             var response = await _httpClient.PostAsync("set/fan", formData);
@@ -118,6 +118,36 @@ public class HomeController : Controller
         {
             IsSuccess = false,
             Message = "Fan hızı değiştirilemedi"
+        });
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> SendLightBrightness(string lightBrightness)
+    {
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StringContent(lightBrightness), "brightness");
+        try
+        {
+            var response = await _httpClient.PostAsync("set/light", formData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return Ok(new ApiResult
+                {
+                    IsSuccess = true,
+                    Message = responseContent
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return Ok(new ApiResult
+        {
+            IsSuccess = false,
+            Message = "Işık parlaklığı değiştirilemedi"
         });
     }
 
